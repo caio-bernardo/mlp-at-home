@@ -1,6 +1,7 @@
 
 #include "./mlp.hpp"
 #include <assert.h>
+#include <iostream>
 #include <math.h>
 #include <random>
 
@@ -201,6 +202,16 @@ void MLPNetwork::train(const std::vector<TrainingData> &data, int epoches,
     for (int epoch = 0; epoch < epoches; epoch++) {
         // executa um treinamento
         float average_loss = trainForEpoch(data, learning_rate);
+
+        std::cout << "Epoca " << epoch + 1 << "/" << epoches
+                  << " | Loss (Erro): " << average_loss << std::endl;
+
+        if (average_loss < threshold) {
+            std::cout
+                << "Treinamento encerrado: erro ficou abaixo do threshold!"
+                << std::endl;
+            break;
+        }
 
         // se a taxa de perda for menor que o threshold podemos parar a
         // simulação
