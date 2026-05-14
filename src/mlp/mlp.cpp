@@ -219,7 +219,9 @@ float MLPNetwork::activation_function(float z) {
     case ActivationFunctionType::ReLu:
         return std::max(0.0f, z);
     case ActivationFunctionType::Sigmoid:
-        return 1.0f / (1.0f + std::exp(-z));
+        // Sigmoid um pouco alterada para deixar o resultado entre -1 e 1, como
+        // nos dados do dataset
+        return (2.0f / (1.0f + std::exp(-z))) - 1.0f;
     default:
         return z;
     }
@@ -230,7 +232,7 @@ float MLPNetwork::activation_function_derivative(float z) {
     case ActivationFunctionType::ReLu:
         return z > 0.0f ? 1.0f : 0.0f;
     case ActivationFunctionType::Sigmoid:
-        return z * (1.0f - z);
+        return 0.5f * (1.0f - z * z);
     default:
         return 1.0f;
     }
