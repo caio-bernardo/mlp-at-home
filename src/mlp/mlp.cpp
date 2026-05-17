@@ -97,8 +97,7 @@ MLPNetwork::forwardPropagation(const std::vector<float> &input) {
         auto next_activation = std::vector<float>(layer.biases.size(), 0.0f);
 
         for (size_t neuron = 0; neuron < layer.biases.size(); neuron++) {
-            auto &z = layer.biases[neuron];
-
+            float z = layer.biases[neuron];
             for (size_t input = 0; input < activation.size(); input++) {
                 z += layer.weights[neuron][input] * activation[input];
             }
@@ -161,11 +160,11 @@ void MLPNetwork::backwardPropagation(
             layer_input = layers[i - 1].activations;
         }
 
-        for (size_t neuron = 0; neuron < layer.biases.size() - 1; neuron++) {
+        for (size_t neuron = 0; neuron < layer.biases.size(); neuron++) {
             layer.bias_gradients[neuron] += layer.deltas[neuron];
         }
 
-        for (size_t neuron = 0; neuron < layer.deltas.size() - 1; neuron++) {
+        for (size_t neuron = 0; neuron < layer.deltas.size(); neuron++) {
             for (size_t j = 0; j < layer_input.size(); j++) {
                 layer.weight_gradients[neuron][j] +=
                     layer.deltas[neuron] * layer_input[j];
@@ -189,7 +188,7 @@ void MLPNetwork::updateWeightsAndBiases(float learning_rate) {
         }
 
         // atualiza os biases
-        for (size_t neuron = 0; neuron < layer.biases.size() - 1; neuron++) {
+        for (size_t neuron = 0; neuron < layer.biases.size(); neuron++) {
             auto gradient = layer.bias_gradients[neuron];
             layer.biases[neuron] -= learning_rate * gradient;
         }
